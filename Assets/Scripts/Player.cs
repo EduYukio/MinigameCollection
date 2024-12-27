@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -7,13 +8,22 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        Vector3 mousePosition = Input.mousePosition;
-        Vector3 direction = mousePosition - transform.position;
-        //fazer player rotacionar de acordo com a direção entre o mouse e o player
+        Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 playerCenter = transform.position;
+        Vector3 pointerVector = mousePosition - playerCenter;
+        double angle = Math.Acos(pointerVector.x / pointerVector.magnitude) * (180 / Math.PI);
+        if (pointerVector.y < 0)
+        {
+            angle *= -1;
+        }
+
+        transform.eulerAngles = new Vector3(0, 0, (float)angle - 90);
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            Instantiate(ball, launchPosition.position, Quaternion.identity);
+            GameObject ballInstance = Instantiate(ball, launchPosition.position, Quaternion.identity);
+            Ball ballInstanceScript = ballInstance.GetComponent<Ball>();
+            ballInstanceScript.SetInitialParameters(pointerVector.normalized);
         }
     }
 }
