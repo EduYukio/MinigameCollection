@@ -1,10 +1,18 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
     public GameObject ball;
     public Transform launchPosition;
+    const float timeBetweenLaunches = 0.1f;
+    // GameManager gameManager;
+
+    // private void Start()
+    // {
+    //     gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+    // }
 
     private void Update()
     {
@@ -21,9 +29,18 @@ public class Player : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
+            StartCoroutine(ThrowBall(pointerVector));
+        }
+    }
+
+    IEnumerator ThrowBall(Vector3 pointerVector)
+    {
+        for (int i = 0; i < GameManager.round; i++)
+        {
             GameObject ballInstance = Instantiate(ball, launchPosition.position, Quaternion.identity);
             Ball ballInstanceScript = ballInstance.GetComponent<Ball>();
             ballInstanceScript.SetInitialParameters(pointerVector.normalized);
+            yield return new WaitForSeconds(timeBetweenLaunches);
         }
     }
 }
