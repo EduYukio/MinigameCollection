@@ -3,9 +3,7 @@ using UnityEngine;
 public class Ball : MonoBehaviour
 {
     public float speed;
-    Vector2 direction;
     Rigidbody2D rb;
-    // const float hitDelay = 
 
     public void SetInitialParameters(Vector2 direction)
     {

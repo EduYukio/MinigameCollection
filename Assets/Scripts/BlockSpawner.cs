@@ -8,7 +8,7 @@ public class BlockSpawner : MonoBehaviour
 
     const int maxBlocksPerLine = 10;
     const int maxAmountOfHoles = 7;
-    const float chanceOfSpawningHole = 0.5f;
+    const float chanceOfSpawningHole = 0.6f;
     const float horizontalDistanceBetweenBlocks = 0.55f;
     const float verticalDistanceBetweenBlocks = 0.55f;
 
