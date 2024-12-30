@@ -7,8 +7,10 @@ public class BlockSpawner : MonoBehaviour
     public GameObject initialBlockPositionObject;
 
     const int maxBlocksPerLine = 10;
+    const int maxAmountOfHoles = 7;
+    const float chanceOfSpawningHole = 0.5f;
     const float horizontalDistanceBetweenBlocks = 0.55f;
-    const float verticalDistanceBetweenBlocks = 0.625f;
+    const float verticalDistanceBetweenBlocks = 0.55f;
 
     readonly List<List<GameObject>> lines = new();
 
@@ -16,9 +18,15 @@ public class BlockSpawner : MonoBehaviour
     {
         List<GameObject> line = new();
 
+        int amountOfHoles = 0;
         for (int i = 0; i < maxBlocksPerLine; i++)
         {
-            //adicionar um random continue pra ter buracos na linha
+            if (MustSpawnHole(amountOfHoles))
+            {
+                amountOfHoles++;
+                continue;
+            }
+
             Vector3 initialPosition = initialBlockPositionObject.transform.position;
             float xBlockPosition = initialPosition.x + horizontalDistanceBetweenBlocks * i;
             Vector3 position = new(xBlockPosition, initialPosition.y, 0);
@@ -49,5 +57,13 @@ public class BlockSpawner : MonoBehaviour
             }
             // fazer descer mais bonito com animação/interpolação ao inves de só setar position
         }
+    }
+
+    private bool MustSpawnHole(int amountOfHoles)
+    {
+        if (amountOfHoles >= maxAmountOfHoles) return false;
+        if (UnityEngine.Random.Range(0f, 1f) > chanceOfSpawningHole) return false;
+
+        return true;
     }
 }

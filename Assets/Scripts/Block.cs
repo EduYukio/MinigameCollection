@@ -11,29 +11,26 @@ public class Block : MonoBehaviour
         lives = initialLives;
     }
 
-    private void Start()
+    public void GotHit()
     {
-        livesIndicator = transform.Find("LivesIndicator").gameObject;
-        SetLivesText();
-    }
-
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.CompareTag("Ball"))
+        lives--;
+        if (lives <= 0)
         {
-            lives--;
-            if (lives <= 0)
-            {
-                Destroy(gameObject);
-            }
-            else
-            {
-                SetLivesText();
-            }
+            Destroy(gameObject, 0.01f);
+        }
+        else
+        {
+            UpdateLivesText();
         }
     }
 
-    private void SetLivesText()
+    private void Start()
+    {
+        livesIndicator = transform.Find("LivesIndicator").gameObject;
+        UpdateLivesText();
+    }
+
+    private void UpdateLivesText()
     {
         livesIndicator.GetComponent<TextMeshPro>().text = lives.ToString();
     }

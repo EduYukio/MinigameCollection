@@ -5,6 +5,7 @@ public class Ball : MonoBehaviour
     public float speed;
     Vector2 direction;
     Rigidbody2D rb;
+    // const float hitDelay = 
 
     public void SetInitialParameters(Vector2 direction)
     {
@@ -14,13 +15,35 @@ public class Ball : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("TopBotWall"))
+        Debug.Log($"DBG: OnTriggerEnter2D other = {other}");
+
+        switch (other.tag)
         {
-            rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * -1);
+            case "Block":
+                other.gameObject.GetComponent<Block>().GotHit();
+                break;
+            case "TopBotWall":
+                rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * -1);
+                break;
+            case "SideWall":
+                rb.velocity = new Vector2(rb.velocity.x * -1, rb.velocity.y);
+                break;
+                // default:
+                //     break;
         }
-        else if (other.CompareTag("SideWall"))
-        {
-            rb.velocity = new Vector2(rb.velocity.x * -1, rb.velocity.y);
-        }
+
+        //checar se dá pra fazer um switch
+        // if (other.CompareTag("Block"))
+        // {
+        //     other.gameObject.GetComponent<Block>().GotHit();
+        // }
+        // else if (other.CompareTag("TopBotWall"))
+        // {
+        //     rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * -1);
+        // }
+        // else if (other.CompareTag("SideWall"))
+        // {
+        //     rb.velocity = new Vector2(rb.velocity.x * -1, rb.velocity.y);
+        // }
     }
 }

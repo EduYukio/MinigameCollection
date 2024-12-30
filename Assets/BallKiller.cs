@@ -15,7 +15,7 @@ public class BallKiller : MonoBehaviour
         //talvez melhorar isso transformando o GameManager em um manager 'global', igual o AudioManager no MP1
         if (other.CompareTag("Ball"))
         {
-            Destroy(other);
+            Destroy(other.gameObject);
             ballsKilledThisRound++;
 
             if (ballsKilledThisRound == GameManager.round)
