@@ -6,13 +6,14 @@ public class BlockSpawner : MonoBehaviour
     public GameObject blockPrefab;
     public GameObject initialBlockPositionObject;
 
-    const int maxBlocksPerLine = 10;
-    const int maxAmountOfHoles = 7;
-    const float chanceOfSpawningHole = 0.6f;
-    const float horizontalDistanceBetweenBlocks = 0.55f;
-    const float verticalDistanceBetweenBlocks = 0.55f;
+    private const int maxBlocksPerLine = 10;
+    private const int maxAmountOfHoles = 7;
+    private const float chanceOfSpawningHole = 0.6f;
+    private const float horizontalDistanceBetweenBlocks = 0.55f;
+    private const float verticalDistanceBetweenBlocks = 0.55f;
 
-    readonly List<List<GameObject>> lines = new();
+    private GameManager gameManager;
+    private List<List<GameObject>> lines;
 
     public void SpawnLineOfBlocks(int round)
     {
@@ -33,7 +34,7 @@ public class BlockSpawner : MonoBehaviour
 
             GameObject blockInstance = Instantiate(blockPrefab, position, Quaternion.identity);
             Block blockScript = blockInstance.GetComponent<Block>();
-            blockScript.SetLives(round);
+            blockScript.Initialize(round, line);
 
             line.Add(blockInstance);
         }
@@ -43,7 +44,6 @@ public class BlockSpawner : MonoBehaviour
 
     public void MoveLinesDown()
     {
-        Debug.Log($"MoveLinesDown, amount of lines: {lines.Count}");
         for (int i = 0; i < lines.Count; i++)
         {
             var currentLine = lines[i];
@@ -65,5 +65,11 @@ public class BlockSpawner : MonoBehaviour
         if (UnityEngine.Random.Range(0f, 1f) > chanceOfSpawningHole) return false;
 
         return true;
+    }
+
+    private void Start()
+    {
+        gameManager = transform.parent.GetComponent<GameManager>();
+        lines = gameManager.lines;
     }
 }

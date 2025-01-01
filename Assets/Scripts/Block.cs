@@ -1,14 +1,20 @@
+using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
 public class Block : MonoBehaviour
 {
-    GameObject livesIndicator;
-    int lives = 1;
+    public static Action<GameObject, List<GameObject>> WillBeDestroyed;
 
-    public void SetLives(int initialLives)
+    private int lives = 1;
+    private GameObject livesIndicator;
+    private List<GameObject> line;
+
+    public void Initialize(int initialLives, List<GameObject> initialLine)
     {
         lives = initialLives;
+        line = initialLine;
     }
 
     public void GotHit()
@@ -16,6 +22,7 @@ public class Block : MonoBehaviour
         lives--;
         if (lives <= 0)
         {
+            WillBeDestroyed?.Invoke(gameObject, line);
             Destroy(gameObject, 0.01f);
         }
         else
